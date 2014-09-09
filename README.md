@@ -1,6 +1,6 @@
 # We're in the battle for the net.
 
-#### Help spread the word on Net Neutrality by displaying an image on your WordPress site that links to https://www.battleforthenet.com/
+#### Help spread the word in our fight for Net Neutrality by displaying an image on your WordPress site that links to https://www.battleforthenet.com/
 
 This plugin comes with 3 different images used from https://www.battleforthenet.com/, or you may use your own.
 If you'd like to use an image that comes with the plugin, you can identify them by using '1', '2', or '3'
