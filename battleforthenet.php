@@ -5,6 +5,7 @@ Description: We're in the battle for the net.  This plugin will display a linked
 Plugin URI: http://thewpvalet.com/
 Author: The WP Valet
 Author URI: http://thewpvalet.com/
+Contributors: wpvalet, joshshahaty, easilyamused
 Version: 1.0
 License: GPL2
 */
