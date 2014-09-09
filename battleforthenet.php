@@ -36,7 +36,6 @@ define( 'BFTN_PLUGIN_URI', plugin_dir_url(__FILE__) );
  * @param  string 	$type 	type of display
  * @return string       	image/link output
  */
-
 function battleforthenet_output( $type ){
 
 	switch ( $type ) {
@@ -157,10 +156,10 @@ class BFTN_Widget extends WP_Widget {
             <p>
               <label for="<?php echo $this->get_field_id('type'); ?>"><?php _e('Display Type:'); ?></label>
               <select id="<?php echo $this->get_field_id('type'); ?>" name="<?php echo $this->get_field_name('type'); ?>">
-              	<option value="modal" <?php selected( $instance['type'], 'modal'); ?> >Modal</option>
-              	<option value="embed" <?php selected( $instance['type'], 'embed'); ?> >Embedded Modal</option>
-              	<option value="lightbanner" <?php selected( $instance['type'], 'lightbanner'); ?> >Light Banner</option>
-              	<option value="darkbanner" <?php selected( $instance['type'], 'darkbanner'); ?> >Dark Banner</option>
+				<option value="modal" <?php selected( $instance['type'], 'modal'); ?> >Modal</option>
+				<option value="embed" <?php selected( $instance['type'], 'embed'); ?> >Embedded Modal</option>
+				<option value="lightbanner" <?php selected( $instance['type'], 'lightbanner'); ?> >Light Banner</option>
+				<option value="darkbanner" <?php selected( $instance['type'], 'darkbanner'); ?> >Dark Banner</option>
 				<option value="image1" <?php selected( $instance['type'], 'image1'); ?> >Static Image 1</option>
 				<option value="image2" <?php selected( $instance['type'], 'image2'); ?> >Static Image 2</option>
 				<option value="image3" <?php selected( $instance['type'], 'image3'); ?> >Static Image 3</option>
