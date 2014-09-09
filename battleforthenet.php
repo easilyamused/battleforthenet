@@ -45,6 +45,10 @@ function battleforthenet_output( $type ){
 			$output = '<script src="//widget.battleforthenet.com/widget.min.js" async></script>';
 			break;
 
+		case 'embed' :
+			$output = '<iframe style="width: 750px; height: 467px;" frameborder="no" src="https://widget.battleforthenet.com/iframe/modal.html#EMBED"></iframe>';
+			break;
+
 		case 'lightbanner':
 			$output = '<script type="text/javascript">var _bftn_options = { animation: "banner" }</script><script src="//widget.battleforthenet.com/widget.min.js" async></script>';
 			break;
@@ -88,7 +92,7 @@ function battleforthenet_output( $type ){
 add_shortcode( 'battleforthenet', 'bftn_shortcode_output' );
 
 function bftn_shortcode_output( $atts = null ){
-	extract( shortcode_atts( array( 'type' => 'modal', 'custom_image' => null ), $atts ) );
+	extract( shortcode_atts( array( 'type' => 'modal' ), $atts ) );
 	return battleforthenet_output( $type );
 }
 
@@ -119,10 +123,13 @@ class BFTN_Widget extends WP_Widget {
     function widget( $args, $instance ) {
         extract( $args, EXTR_SKIP );
         echo $before_widget;
-        echo $before_title;
-        echo $instance['title']; // Can set this with a widget option, or omit altogether
-        echo battleforthenet_output( $instance['battle_type'] );
-        echo $after_title;
+        $no_title = array( 'modal', 'lightbanner', 'darkbanner' );
+        if ( ! in_array( $instance['type'], $no_title ) ){        	
+	        echo $before_title;
+	        echo $instance['title']; // Can set this with a widget option, or omit altogether
+	        echo $after_title;
+        }
+        echo battleforthenet_output( $instance['type'] );        
     	echo $after_widget;
     }
 
@@ -131,7 +138,7 @@ class BFTN_Widget extends WP_Widget {
      */
     function update( $new_instance, $old_instance ) {
         $updated_instance['title'] = esc_html( $new_instance['title'] );
-        $updated_instance['battle_type'] = esc_html( trim( $new_instance['battle_type'] ) );
+        $updated_instance['type'] = esc_html( trim( $new_instance['type'] ) );
         $updated_instance['custom_image'] = esc_url( $new_instance['custom_image'] );
         return $updated_instance;
     }
@@ -140,7 +147,7 @@ class BFTN_Widget extends WP_Widget {
      * Widget form
      */
     function form( $instance ) {
-        $instance = wp_parse_args( (array) $instance, array( 'title' => __( "We're in the battle for the net.", 'btfn' ), 'battle_type' => 'modal', 'custom_image' => '' ) );
+        $instance = wp_parse_args( (array) $instance, array( 'title' => __( "We're in the battle for the net.", 'btfn' ), 'type' => 'modal', 'custom_image' => '' ) );
         extract( $instance );
         ?>
             <p>
@@ -148,14 +155,15 @@ class BFTN_Widget extends WP_Widget {
               <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
             </p>
             <p>
-              <label for="<?php echo $this->get_field_id('battle_type'); ?>"><?php _e('Select Battle Image:'); ?></label>
-              <select id="<?php echo $this->get_field_id('battle_type'); ?>" name="<?php echo $this->get_field_name('battle_type'); ?>">
-              	<option value="modal" <?php selected( $instance['battle_type'], 'modal'); ?> >Modal</option>
-              	<option value="lightbanner" <?php selected( $instance['battle_type'], 'lightbanner'); ?> >Light Banner</option>
-              	<option value="darkbanner" <?php selected( $instance['battle_type'], 'darkbanner'); ?> >Dark Banner</option>
-				<option value="image1" <?php selected( $instance['battle_type'], 'image1'); ?> >Static Image 1</option>
-				<option value="image2" <?php selected( $instance['battle_type'], 'image2'); ?> >Static Image 2</option>
-				<option value="image3" <?php selected( $instance['battle_type'], 'image3'); ?> >Static Image 3</option>
+              <label for="<?php echo $this->get_field_id('type'); ?>"><?php _e('Display Type:'); ?></label>
+              <select id="<?php echo $this->get_field_id('type'); ?>" name="<?php echo $this->get_field_name('type'); ?>">
+              	<option value="modal" <?php selected( $instance['type'], 'modal'); ?> >Modal</option>
+              	<option value="embed" <?php selected( $instance['type'], 'embed'); ?> >Embedded Modal</option>
+              	<option value="lightbanner" <?php selected( $instance['type'], 'lightbanner'); ?> >Light Banner</option>
+              	<option value="darkbanner" <?php selected( $instance['type'], 'darkbanner'); ?> >Dark Banner</option>
+				<option value="image1" <?php selected( $instance['type'], 'image1'); ?> >Static Image 1</option>
+				<option value="image2" <?php selected( $instance['type'], 'image2'); ?> >Static Image 2</option>
+				<option value="image3" <?php selected( $instance['type'], 'image3'); ?> >Static Image 3</option>
               </select>             
             <p>
               <label for="<?php echo $this->get_field_id('custom_image'); ?>"><?php _e('Use your own image, custom image url:'); ?></label> 
