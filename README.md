@@ -7,6 +7,7 @@
 This plugin comes with 3 different javascript overlays: Modal, Lightbanner, Darkbanner
 - See examples of these here: https://www.battleforthenet.com/sept10th/#sites
 - These will only display on Sept 10th
+- Add `#SHOW_BFTN_WIDGET` to the end of your URL to force it to show
 
 It also comes with a Modal Embed that you can embed in pages and posts.
 - Displays regardless of Sept 10th
