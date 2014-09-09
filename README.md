@@ -11,12 +11,12 @@ It also comes with 3 static images that will link to https://www.battleforthenet
 
 **Type names**: modal, lightbanner, darkbanner, image1, image2, image3
 
-** Display via Widget.**
+**Display via Widget.**
 
-** Display via shortcode**: `[battleforthenet]` that uses a default image size of X and uses this image:
+**Display via shortcode**: `[battleforthenet]` that uses a default type of `modal`:
 - Use a different display, Ex: `[battleforthenet type=darkbanner]`  Ex: `[battleforthenet type=image2]`
 
-** Display via PHP function**:
+**Display via PHP function**:
 `<?php if function_exists( 'battleforthenet_output' ) : ?>
 	<?php battleforthenet_output( $type, $custom_image ); ?>
 <?php endif; ?>`
