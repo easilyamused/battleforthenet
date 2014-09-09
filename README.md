@@ -2,18 +2,21 @@
 
 #### Help spread the word in our fight for Net Neutrality by displaying an image on your WordPress site that links to https://www.battleforthenet.com/
 
-This plugin comes with 3 different images used from https://www.battleforthenet.com/, or you may use your own.
-If you'd like to use an image that comes with the plugin, you can identify them by using '1', '2', or '3'
+This plugin comes with 3 different javascript overlays: Modal, Lightbanner, Darkbanner
+- See examples of these here: https://www.battleforthenet.com/sept10th/#sites
+- These will only display on Sept 10th
 
-**Comes with a Widget.**
+It also comes with 3 static images that will link to https://www.battleforthenet.com/
+- These are the dark images at the bottom of this page: https://www.battleforthenet.com/sept10th/
 
-**Comes with a shortcode**: `[battleforthenet]` that uses a default image size of X and uses this image:
-- Use a different image we've supplied, Ex: `[battleforthenet battle_image=2]`
-- Use your own image, ex:  `[battleforthenet custom_image=yourcustomimage.png]`
+**Type names**: modal, lightbanner, darkbanner, image1, image2, image3
 
-**Use a PHP function**:
+** Display via Widget.**
+
+** Display via shortcode**: `[battleforthenet]` that uses a default image size of X and uses this image:
+- Use a different display, Ex: `[battleforthenet type=darkbanner]`  Ex: `[battleforthenet type=image2]`
+
+** Display via PHP function**:
 `<?php if function_exists( 'battleforthenet_output' ) : ?>
-	<?php battleforthenet_output( $battle_image, $custom_image ); ?>
+	<?php battleforthenet_output( $type, $custom_image ); ?>
 <?php endif; ?>`
-
-- $battle_image is '1', '2', or '3'

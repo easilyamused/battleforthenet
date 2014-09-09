@@ -28,44 +28,55 @@ License: GPL2
 */
 
 
-/**
- * Set default battle image
- */
 define( 'BFTN_PLUGIN_URI', plugin_dir_url(__FILE__) );
-define( 'BFTN_DEFAULT_BATTLE_IMAGE', BFTN_PLUGIN_URI . '/images/battle3.png' );
-
 
 
 /**
  * Outputs image and link to battleforthenet.com
- * @param  string 	$battle_image 	id of battle image
- * @return string       			image/link output
+ * @param  string 	$type 	type of display
+ * @return string       	image/link output
  */
-function battleforthenet_output( $battle_image_id, $custom_image = null ){
 
-	switch ( $battle_image_id ) {
-		case '1':
-			$image_url = BFTN_PLUGIN_URI . '/images/battle1.png';
+function battleforthenet_output( $type ){
+
+	switch ( $type ) {
+
+		case 'modal':
+			$output = '<script src="//widget.battleforthenet.com/widget.min.js" async></script>';
 			break;
 
-		case '2':
-			$image_url = BFTN_PLUGIN_URI . '/images/battle2.png';
+		case 'lightbanner':
+			$output = '<script type="text/javascript">var _bftn_options = { animation: "banner" }</script><script src="//widget.battleforthenet.com/widget.min.js" async></script>';
 			break;
 
-		case '3':
-			$image_url = BFTN_PLUGIN_URI . '/images/battle3.png';
+		case 'darkbanner':
+			$output = '<script type="text/javascript">var _bftn_options = { animation: "banner", theme: "dark" }</script><script src="//widget.battleforthenet.com/widget.min.js" async></script>';
+			break;
+
+		case 'image1':
+			$image = BFTN_PLUGIN_URI . '/images/battle1.png';
+			break;
+
+		case 'image2':
+			$image = BFTN_PLUGIN_URI . '/images/battle2.png';
+			break;
+
+		case 'image3':
+			$image = BFTN_PLUGIN_URI . '/images/battle3.png';
 			break;
 		
 		default:
-			$image_url = BFTN_DEFAULT_BATTLE_IMAGE;
+			//modal
+			$output = '<script src="//widget.battleforthenet.com/widget.min.js" async></script>';
 			break;
+
 	}
 
-	if ( ! empty( $custom_image ) ){
-		$image_url = esc_url( $custom_image );
+	if ( ! empty( $image ) ){
+		$output = "<a class='btfn-image' href='http://www.battleforthenet.com/' target='_blank'><img src={$image}></a>";
 	}
 
-	return "<a class='btfn-image' href='http://www.battleforthenet.com/' target='_blank'><img src={$image_url}></a>";
+	return $output;
 
 }
 
@@ -77,11 +88,9 @@ function battleforthenet_output( $battle_image_id, $custom_image = null ){
 add_shortcode( 'battleforthenet', 'bftn_shortcode_output' );
 
 function bftn_shortcode_output( $atts = null ){
-	extract( shortcode_atts( array( 'battle_image' => BFTN_DEFAULT_BATTLE_IMAGE, 'custom_image' => null ), $atts ) );
-	return battleforthenet_output( $battle_image, $custom_image );
+	extract( shortcode_atts( array( 'type' => 'modal', 'custom_image' => null ), $atts ) );
+	return battleforthenet_output( $type );
 }
-
-
 
 
 /**
@@ -112,7 +121,7 @@ class BFTN_Widget extends WP_Widget {
         echo $before_widget;
         echo $before_title;
         echo $instance['title']; // Can set this with a widget option, or omit altogether
-        echo battleforthenet_output( $instance['battle_image'], $instance['custom_image'] );
+        echo battleforthenet_output( $instance['battle_type'] );
         echo $after_title;
     	echo $after_widget;
     }
@@ -122,7 +131,7 @@ class BFTN_Widget extends WP_Widget {
      */
     function update( $new_instance, $old_instance ) {
         $updated_instance['title'] = esc_html( $new_instance['title'] );
-        $updated_instance['battle_image'] = esc_html( trim( $new_instance['battle_image'] ) );
+        $updated_instance['battle_type'] = esc_html( trim( $new_instance['battle_type'] ) );
         $updated_instance['custom_image'] = esc_url( $new_instance['custom_image'] );
         return $updated_instance;
     }
@@ -131,7 +140,7 @@ class BFTN_Widget extends WP_Widget {
      * Widget form
      */
     function form( $instance ) {
-        $instance = wp_parse_args( (array) $instance, array( 'title' => __( "We're in the battle for the net.", 'btfn' ), 'battle_image' => '3', 'custom_image' => '' ) );
+        $instance = wp_parse_args( (array) $instance, array( 'title' => __( "We're in the battle for the net.", 'btfn' ), 'battle_type' => 'modal', 'custom_image' => '' ) );
         extract( $instance );
         ?>
             <p>
@@ -139,11 +148,14 @@ class BFTN_Widget extends WP_Widget {
               <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
             </p>
             <p>
-              <label for="<?php echo $this->get_field_id('battle_image'); ?>"><?php _e('Select Battle Image:'); ?></label>
-              <select id="<?php echo $this->get_field_id('battle_image'); ?>" name="<?php echo $this->get_field_name('battle_image'); ?>">
-				<option value="1" <?php selected( $instance['battle_image'], '1'); ?> >1</option>
-				<option value="2" <?php selected( $instance['battle_image'], '2'); ?> >2</option>
-				<option value="3" <?php selected( $instance['battle_image'], '3'); ?> >3</option>
+              <label for="<?php echo $this->get_field_id('battle_type'); ?>"><?php _e('Select Battle Image:'); ?></label>
+              <select id="<?php echo $this->get_field_id('battle_type'); ?>" name="<?php echo $this->get_field_name('battle_type'); ?>">
+              	<option value="modal" <?php selected( $instance['battle_type'], 'modal'); ?> >Modal</option>
+              	<option value="lightbanner" <?php selected( $instance['battle_type'], 'lightbanner'); ?> >Light Banner</option>
+              	<option value="darkbanner" <?php selected( $instance['battle_type'], 'darkbanner'); ?> >Dark Banner</option>
+				<option value="image1" <?php selected( $instance['battle_type'], 'image1'); ?> >Static Image 1</option>
+				<option value="image2" <?php selected( $instance['battle_type'], 'image2'); ?> >Static Image 2</option>
+				<option value="image3" <?php selected( $instance['battle_type'], 'image3'); ?> >Static Image 3</option>
               </select>             
             <p>
               <label for="<?php echo $this->get_field_id('custom_image'); ?>"><?php _e('Use your own image, custom image url:'); ?></label> 
